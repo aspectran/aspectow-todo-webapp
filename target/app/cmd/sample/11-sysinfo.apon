@@ -1,9 +1,0 @@
-command: sysinfo 
-arguments: {
-    item: {
-        value: mem
-    }
-    item: {
-        value: props
-    }
-}

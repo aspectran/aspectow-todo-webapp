@@ -1,3 +1,0 @@
-command: invokeAction
-bean: helloActivity
-method: helloWorld

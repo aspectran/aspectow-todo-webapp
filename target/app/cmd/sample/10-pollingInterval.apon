@@ -1,7 +1,0 @@
-command: pollingInterval
-arguments: {
-    item: {
-        value: 4000
-        valueType: long
-    }
-}

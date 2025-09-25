@@ -1,8 +1,0 @@
-command: template
-template: hello
-parameters: {
-    item: {
-        name: what
-        value: World
-    }
-}
