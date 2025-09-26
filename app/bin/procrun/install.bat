@@ -75,7 +75,7 @@ echo Aspectran Home: %BASE_DIR%
 
 rem Service log configuration
 set PR_LOGPATH=%BASE_DIR%\logs\procrun
-if not exist %PR_LOGPATH% mkdir %PR_LOGPATH%
+if not exist "%PR_LOGPATH%" mkdir "%PR_LOGPATH%"
 set PR_LOGPREFIX=%SERVICE_NAME%
 set PR_LOGLEVEL=Info
 set PR_STDOUTPUT=%BASE_DIR%\logs\%SERVICE_NAME%-stdout.log
@@ -109,7 +109,7 @@ set PR_JVMOPTIONS=%PR_JVMOPTIONS%;-Daspectran.basePath=%BASE_DIR%
 set PR_JVMOPTIONS=%PR_JVMOPTIONS%;-Dlogback.configurationFile=%BASE_DIR%\config\logging\logback.xml
 
 echo Creating Service...
-"%PR_INSTALL%" //IS/%SERVICE_NAME%^
+"%PR_INSTALL%" //IS//%SERVICE_NAME%^
  --DisplayName="%DISPLAY_NAME%"^
  --Description="%DESCRIPTION%"^
  --Install="%PR_INSTALL%"^
