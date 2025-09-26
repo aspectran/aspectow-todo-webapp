@@ -29,55 +29,62 @@ done
 PRG=$(basename "$ARG0")
 PRG_DIR=$(dirname "$ARG0")
 BASE_DIR="$PRG_DIR/.."
-BASE_DIR="$(
+BASE_DIR=(
   cd "$BASE_DIR" || exit
   pwd
-)"
+)
 
 set -a
+# shellcheck disable=SC1090
 . "$BASE_DIR/bin/run.options"
 set +a
 
+# Parse command-line arguments
 while [ ".$1" != . ]; do
   case "$1" in
   --base-dir)
     BASE_DIR="$2"
     shift; shift;
     continue
-    ;;
+    ;; 
   --java-home)
     JAVA_HOME="$2"
     shift; shift;
     continue
-    ;;
+    ;; 
   --proc-name)
     PROC_NAME="$2"
     shift; shift;
     continue
-    ;;
+    ;; 
   --pid-file)
     PID_FILE="$2"
     shift; shift;
     continue
-    ;;
+    ;; 
   --user)
     DAEMON_USER="-user $2"
     shift; shift;
     continue
-    ;;
+    ;; 
   --service-start-wait-time)
     SERVICE_START_WAIT_TIME="$2"
     shift; shift;
     continue
-    ;;
+    ;; 
   *)
     break
-    ;;
+    ;; 
   esac
 done
 
+# -----------------------------------------------------------------------------
+# Find JAVA_HOME if not set
+# -----------------------------------------------------------------------------
 if [ -z "$JAVA_HOME" ]; then
+  # Find 'java' binary
   JAVA_BIN="$(command -v java 2>/dev/null || type java 2>&1)"
+  # Resolve symlinks
   while [ -h "$JAVA_BIN" ]; do
     ls=$(ls -ld "$JAVA_BIN")
     link=$(expr "$ls" : '.*-> \(.*\)$')
@@ -87,15 +94,31 @@ if [ -z "$JAVA_HOME" ]; then
       JAVA_BIN="$(dirname "$JAVA_BIN")/$link"
     fi
   done
-  [ -x "$JAVA_BIN" ] && JAVA_HOME="$(dirname "$JAVA_BIN")"
-  [ ! -z "$JAVA_HOME"] && JAVA_HOME=$(
-    cd "$JAVA_HOME/.." >/dev/null || exit
-    pwd
-  )
-else
+  # If java binary is found, set JAVA_HOME to its parent directory
+  if [ -x "$JAVA_BIN" ]; then
+    JAVA_HOME="$(dirname "$JAVA_BIN")"
+    # If JAVA_HOME is not empty, get the real path of its parent directory
+    if [ ! -z "$JAVA_HOME" ]; then
+      JAVA_HOME=(
+        cd "$JAVA_HOME/.." >/dev/null || exit
+        pwd
+      )
+    fi
+  fi
+fi
+
+# Set JAVA_BIN if JAVA_HOME is set
+if [ -n "$JAVA_HOME" ]; then
   JAVA_BIN="$JAVA_HOME/bin/java"
 fi
 
+# Check if java is available
+if [ ! -x "$JAVA_BIN" ]; then
+  echo "Error: JAVA_HOME is not set and 'java' command is not in your PATH."
+  exit 1
+fi
+
+# Set JVM options
 if [ ! -z "$JVM_MS" ]; then
   JVM_MS_OPT="-Xms${JVM_MS}m"
 fi
@@ -127,9 +150,12 @@ CLASSPATH="$BASE_DIR/lib/*"
 TMP_DIR="$BASE_DIR/temp"
 ASPECTRAN_CONFIG="$BASE_DIR/config/aspectran-config.apon"
 LOGGING_CONFIG="$BASE_DIR/config/logging/logback.xml"
+# Timeout in seconds for stop operation
+WAIT_TIMEOUT=60
 
 start_daemon() {
   : >"$DAEMON_OUT"
+  : >"$DAEMON_ERR"
   "$JSVC" \
     $JVM_MS_OPT \
     $JVM_MX_OPT \
@@ -155,24 +181,15 @@ start_daemon() {
 }
 
 stop_daemon() {
-  : >"$DAEMON_OUT"
   "$JSVC" \
-    $JVM_MS_OPT \
-    $JVM_MX_OPT \
-    $JVM_SS_OPT \
     -stop \
-    -jvm server \
-    -procname $PROC_NAME \
     -pidfile "$PID_FILE" \
     -classpath "$CLASSPATH" \
-    -Djava.io.tmpdir="$TMP_DIR" \
-    -Djava.awt.headless=true \
-    -Djava.net.preferIPv4Stack=true \
     $DAEMON_MAIN
   return $?
 }
 
-daemon_version() {
+demon_version() {
   "$JSVC" \
     -version \
     -check \
@@ -183,6 +200,7 @@ daemon_version() {
     $DAEMON_MAIN
   return $?
 }
+
 aspectran_version() {
   "$JAVA_BIN" \
     -classpath "$CLASSPATH" \
@@ -191,6 +209,7 @@ aspectran_version() {
     com.aspectran.core.Aspectran
   return $?
 }
+
 version() {
   if aspectran_version; then
     daemon_version
@@ -198,10 +217,9 @@ version() {
 }
 
 pidof_daemon() {
-  if [ -e "$PID_FILE" ]; then
-    if cat "$PID_FILE"; then
-      return 0
-    fi
+  if [ -f "$PID_FILE" ]; then
+    cat "$PID_FILE"
+    return 0
   fi
   return 1
 }
@@ -214,14 +232,30 @@ start_aspectran() {
   fi
   echo "Starting Aspectran daemon..."
   if start_daemon; then
-    sleep 0.1
-    if [ -e "$DAEMON_OUT" ]; then
-      cat "$DAEMON_OUT"
+    if [ -s "$DAEMON_ERR" ]; then # Check if error log has content
+        echo "--- Daemon Error Log ---"
+        cat "$DAEMON_ERR"
+        echo "------------------------"
+    fi
+    if [ -s "$DAEMON_OUT" ]; then # Check if output log has content
+        echo "--- Daemon Output Log ---"
+        cat "$DAEMON_OUT"
+        echo "-------------------------"
     fi
     PID=$(pidof_daemon) || true
-    echo "Aspectran daemon started (pid $PID)."
+    if [ -n "$PID" ]; then
+        echo "Aspectran daemon started (pid $PID)."
+    else
+        echo "Error: Aspectran daemon failed to start. Check logs for details."
+        exit 1
+    fi
   else
-    echo "Can't start aspectran."
+    echo "Error: Can't start Aspectran daemon. jsvc command failed."
+    if [ -s "$DAEMON_ERR" ]; then
+        echo "--- Daemon Error Log ---"
+        cat "$DAEMON_ERR"
+        echo "------------------------"
+    fi
     exit 1
   fi
 }
@@ -232,12 +266,18 @@ stop_aspectran() {
     echo "Aspectran daemon NOT running."
     exit 7
   fi
-  echo "Stopping Aspectran daemon..."
+  echo "Stopping Aspectran daemon (pid $PID)..."
   if stop_daemon; then
-    sleep 0.1
-    if [ -e "$DAEMON_OUT" ]; then
-      cat "$DAEMON_OUT"
-    fi
+    # Wait for the pid file to be removed, with a timeout
+    counter=0
+    while [ -f "$PID_FILE" ]; do
+      if [ "$counter" -ge "$WAIT_TIMEOUT" ]; then
+        echo "Error: Aspectran daemon (pid $PID) failed to stop within $WAIT_TIMEOUT seconds."
+        exit 1
+      fi
+      sleep 1
+      counter=$((counter + 1))
+    done
     echo "Aspectran daemon stopped."
   else
     echo "Can't stop aspectran."
@@ -246,7 +286,13 @@ stop_aspectran() {
 }
 
 restart_aspectran() {
-  if stop_aspectran; then
+  PID=$(pidof_daemon) || true
+  if [ -n "$PID" ]; then
+    if stop_aspectran; then
+      start_aspectran
+    fi
+  else
+    echo "Aspectran daemon is not running. Starting!"
     start_aspectran
   fi
 }
@@ -254,19 +300,13 @@ restart_aspectran() {
 case "$1" in
 start)
   start_aspectran
-  ;;
+  ;; 
 stop)
   stop_aspectran
-  ;;
+  ;; 
 restart | reload | force-reload)
-  PID=$(pidof_daemon) || true
-  if [ -n "$PID" ]; then
-    restart_aspectran
-  else
-    echo "Aspectran daemon is not running. Starting!"
-    start_aspectran
-  fi
-  ;;
+  restart_aspectran
+  ;; 
 try-restart)
   PID=$(pidof_daemon) || true
   if [ -n "$PID" ]; then
@@ -275,23 +315,23 @@ try-restart)
     echo "Aspectran daemon is not running. Try $0 start"
     exit 3
   fi
-  ;;
+  ;; 
 status)
   PID=$(pidof_daemon) || true
   if [ -n "$PID" ]; then
     echo "Aspectran daemon is running (pid $PID)."
   else
     echo "Aspectran daemon is NOT running."
-    if [ -e "$PID_FILE" ]; then
-      exit 1
+    if [ -f "$PID_FILE" ]; then
+      exit 1 # Program is dead and /var/run pid file exists
     else
-      exit 3
+      exit 3 # Program is not running
     fi
   fi
-  ;;
+  ;; 
 version)
   version
-  ;;
+  ;; 
 *)
   echo "Usage: $PRG <command>"
   echo "Commands:"
@@ -302,5 +342,5 @@ version)
   echo "  try-restart       Restart Aspectran daemon if it is running"
   echo "  version           Display version information"
   exit 1
-  ;;
+  ;; 
 esac
