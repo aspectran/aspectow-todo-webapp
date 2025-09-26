@@ -1,4 +1,8 @@
 #!/bin/sh
+# Deploys configuration files.
+# It also restores specific configuration files from the restore directory.
+
+set -e
 
 . ./app.conf
 

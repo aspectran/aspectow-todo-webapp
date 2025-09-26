@@ -20,19 +20,12 @@ fi
 echo "Creating directory structure in $DEPLOY_DIR..."
 
 mkdir -p "$DEPLOY_DIR/bin"
-
 mkdir -p "$DEPLOY_DIR/config"
-
 mkdir -p "$DEPLOY_DIR/lib"
-
 mkdir -p "$DEPLOY_DIR/logs"
-
 mkdir -p "$DEPLOY_DIR/temp"
-
 mkdir -p "$DEPLOY_DIR/work"
-
 mkdir -p "$RESTORE_DIR"
-
 
 # Create optional directories only if they exist in the source repository
 if [ -d "$REPO_DIR/app/cmd" ]; then

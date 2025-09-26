@@ -1,4 +1,7 @@
 #!/bin/sh
+# Starts the interactive shell with debug mode enabled.
+
+set -e
 
 . ./app.conf
 

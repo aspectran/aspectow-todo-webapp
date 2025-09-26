@@ -1,4 +1,7 @@
 #!/bin/sh
+# Tails a specified log file from the application's log directory.
+
+set -e
 
 . ./app.conf
 
