@@ -8,7 +8,7 @@ command -v git >/dev/null || { echo "Error: git is not installed. Please install
 echo "Installing application to $BASE_DIR ..."
 
 if [ ! -d "$REPO_DIR" ]; then
-  [ ! -d "$BUILD_DIR" ] && mkdir "$BUILD_DIR"
+  [ ! -d "$BUILD_DIR" ] && mkdir -p "$BUILD_DIR"
   cd "$BUILD_DIR" || exit
   git clone "$REPO_URL" "$APP_NAME"
 else
@@ -20,12 +20,19 @@ fi
 echo "Creating directory structure in $DEPLOY_DIR..."
 
 mkdir -p "$DEPLOY_DIR/bin"
+
 mkdir -p "$DEPLOY_DIR/config"
+
 mkdir -p "$DEPLOY_DIR/lib"
+
 mkdir -p "$DEPLOY_DIR/logs"
+
 mkdir -p "$DEPLOY_DIR/temp"
+
 mkdir -p "$DEPLOY_DIR/work"
+
 mkdir -p "$RESTORE_DIR"
+
 
 # Create optional directories only if they exist in the source repository
 if [ -d "$REPO_DIR/app/cmd" ]; then
@@ -50,7 +57,7 @@ chmod +x "$DEPLOY_DIR"/bin/*.sh
 [ -d "$REPO_DIR/app/cmd/sample" ] && cp -pR "$REPO_DIR"/app/cmd/sample/* "$DEPLOY_DIR/cmd/sample"
 
 cp "$REPO_DIR/setup/app.conf" "$BASE_DIR" || exit
-cp "$REPO_DIR"/setup/scripts/*.sh "$BASE_DIR" || exit
+cp "$REPO_DIR"/setup/scripts/linux/*.sh "$BASE_DIR" || exit
 chmod +x "$BASE_DIR"/*.sh
 cp "$REPO_DIR/setup/install-service.sh" "$BASE_DIR/setup" || exit
 cp "$REPO_DIR/setup/uninstall-service.sh" "$BASE_DIR/setup" || exit
