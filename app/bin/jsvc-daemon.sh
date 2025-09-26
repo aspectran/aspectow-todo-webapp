@@ -29,7 +29,7 @@ done
 PRG=$(basename "$ARG0")
 PRG_DIR=$(dirname "$ARG0")
 BASE_DIR="$PRG_DIR/.."
-BASE_DIR=(
+BASE_DIR=$(
   cd "$BASE_DIR" || exit
   pwd
 )
@@ -99,7 +99,7 @@ if [ -z "$JAVA_HOME" ]; then
     JAVA_HOME="$(dirname "$JAVA_BIN")"
     # If JAVA_HOME is not empty, get the real path of its parent directory
     if [ ! -z "$JAVA_HOME" ]; then
-      JAVA_HOME=(
+      JAVA_HOME=$(
         cd "$JAVA_HOME/.." >/dev/null || exit
         pwd
       )
@@ -227,20 +227,26 @@ pidof_daemon() {
 start_aspectran() {
   PID=$(pidof_daemon) || true
   if [ -n "$PID" ]; then
-    echo "Aspectran daemon is already running (pid $PID)."
-    exit 0
+    if kill -0 "$PID" > /dev/null 2>&1; then
+      echo "Aspectran daemon is already running (pid $PID)."
+      exit 0
+    else
+      echo "Warning: Found stale PID file for PID $PID. Removing it."
+      rm -f "$PID_FILE"
+      # Also remove the application's own lock file, as it is also stale.
+      if [ -f "$BASE_DIR/.lock" ]; then
+        echo "Warning: Found stale application lock file. Removing it."
+        rm -f "$BASE_DIR/.lock"
+      fi
+    fi
   fi
   echo "Starting Aspectran daemon..."
   if start_daemon; then
     if [ -s "$DAEMON_ERR" ]; then # Check if error log has content
-        echo "--- Daemon Error Log ---"
         cat "$DAEMON_ERR"
-        echo "------------------------"
     fi
     if [ -s "$DAEMON_OUT" ]; then # Check if output log has content
-        echo "--- Daemon Output Log ---"
         cat "$DAEMON_OUT"
-        echo "-------------------------"
     fi
     PID=$(pidof_daemon) || true
     if [ -n "$PID" ]; then
@@ -252,9 +258,7 @@ start_aspectran() {
   else
     echo "Error: Can't start Aspectran daemon. jsvc command failed."
     if [ -s "$DAEMON_ERR" ]; then
-        echo "--- Daemon Error Log ---"
         cat "$DAEMON_ERR"
-        echo "------------------------"
     fi
     exit 1
   fi
@@ -280,7 +284,7 @@ stop_aspectran() {
     done
     echo "Aspectran daemon stopped."
   else
-    echo "Can't stop aspectran."
+    echo "Error: Can't stop Aspectran daemon. jsvc command failed."
     exit 1
   fi
 }
@@ -333,14 +337,23 @@ version)
   version
   ;; 
 *)
-  echo "Usage: $PRG <command>"
+  echo "Usage: $PRG [options] <command>"
+  echo ""
+  echo "Options:"
+  printf "  %-30s %s\n" "--base-dir <path>" "Set the base directory"
+  printf "  %-30s %s\n" "--java-home <path>" "Set the path to Java home"
+  printf "  %-30s %s\n" "--proc-name <name>" "Set the process name"
+  printf "  %-30s %s\n" "--pid-file <path>" "Set the path to the PID file"
+  printf "  %-30s %s\n" "--user <user>" "Set the user to run as"
+  printf "  %-30s %s\n" "--service-start-wait-time <sec>" "Set the wait time for service startup"
+  echo ""
   echo "Commands:"
-  echo "  start             Start Aspectran daemon"
-  echo "  stop              Stop Aspectran daemon"
-  echo "  status            Aspectran daemon status"
-  echo "  restart | reload | force-reload  Restart Aspectran daemon"
-  echo "  try-restart       Restart Aspectran daemon if it is running"
-  echo "  version           Display version information"
+  printf "  %-30s %s\n" "start" "Start Aspectran daemon"
+  printf "  %-30s %s\n" "stop" "Stop Aspectran daemon"
+  printf "  %-30s %s\n" "status" "Aspectran daemon status"
+  printf "  %-30s %s\n" "restart | reload | force-reload" "Restart Aspectran daemon"
+  printf "  %-30s %s\n" "try-restart" "Restart Aspectran daemon if it is running"
+  printf "  %-30s %s\n" "version" "Display version information"
   exit 1
   ;; 
 esac

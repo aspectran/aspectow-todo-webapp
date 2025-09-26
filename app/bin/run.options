@@ -16,3 +16,6 @@
 
 # Java thread stack size in kilobytes.
 #JVM_SS=1024
+
+# Timeout in seconds for daemon start/stop operations.
+#WAIT_TIMEOUT=60

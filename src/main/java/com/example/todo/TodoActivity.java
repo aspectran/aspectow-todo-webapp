@@ -15,7 +15,6 @@
  */
 package com.example.todo;
 
-import com.aspectran.core.activity.Translet;
 import com.aspectran.core.component.bean.annotation.Action;
 import com.aspectran.core.component.bean.annotation.Autowired;
 import com.aspectran.core.component.bean.annotation.Component;
@@ -23,7 +22,6 @@ import com.aspectran.core.component.bean.annotation.Dispatch;
 import com.aspectran.core.component.bean.annotation.Redirect;
 import com.aspectran.core.component.bean.annotation.RequestToGet;
 import com.aspectran.core.component.bean.annotation.RequestToPost;
-import com.aspectran.core.component.bean.annotation.Transform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -43,7 +43,7 @@ if [ -z "$JAVA_HOME" ]; then
     JAVA_HOME="$(dirname "$JAVA_BIN")"
     # If JAVA_HOME is not empty, get the real path of its parent directory
     if [ ! -z "$JAVA_HOME" ]; then
-      JAVA_HOME=(
+      JAVA_HOME=$(
         cd "$JAVA_HOME/.." >/dev/null || exit
         pwd
       )

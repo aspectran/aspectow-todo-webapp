@@ -119,7 +119,8 @@ TMP_DIR="$BASE_DIR/temp"
 ASPECTRAN_CONFIG="$BASE_DIR/config/aspectran-config.apon"
 LOGGING_CONFIG="$BASE_DIR/config/logging/logback.xml"
 # Timeout in seconds for start/stop operations
-WAIT_TIMEOUT=60
+# This can be overridden in run.options
+: "${WAIT_TIMEOUT:=60}"
 
 start_daemon() {
   rm -f "$DAEMON_OUT"
@@ -158,14 +159,19 @@ version() {
 start_aspectran() {
   if [ -f "$LOCK_FILE" ]; then
     PID=$(cat "$LOCK_FILE" 2>/dev/null)
-    echo "Aspectran daemon is already running (pid: $PID)."
-    exit 0
+    if [ -n "$PID" ] && kill -0 "$PID" > /dev/null 2>&1; then
+      echo "Aspectran daemon is already running (pid: $PID)."
+      exit 0
+    else
+      echo "Warning: Found stale lock file. Removing it."
+      rm -f "$LOCK_FILE"
+    fi
   fi
   echo "Starting Aspectran daemon..."
   if start_daemon; then
-    # Wait for the lock file to appear, with a timeout
+    # Wait for the lock file to appear and contain the PID, with a timeout
     counter=0
-    while [ ! -f "$LOCK_FILE" ]; do
+    while [ ! -s "$LOCK_FILE" ]; do
       if [ "$counter" -ge "$WAIT_TIMEOUT" ]; then
         echo "Error: Aspectran daemon failed to start within $WAIT_TIMEOUT seconds."
         if [ -f "$DAEMON_OUT" ]; then
