@@ -9,7 +9,10 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-call "%~dp0..\setenv.bat"
+rem Load environment variables from the setup directory
+pushd %~dp0..\..
+call setenv.bat
+popd
 
 if not exist "%REPO_DIR%" (
   if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"

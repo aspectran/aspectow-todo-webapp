@@ -8,7 +8,7 @@ rem Get the absolute path of the setup directory
 set "SETUP_DIR=%~dp0"
 
 rem Load environment variables
-call "%SETUP_DIR%setenv.bat"
+call %SETUP_DIR%setenv.bat
 
 rem Run the full deployment process
 call "%SETUP_DIR%scripts\windows\5-pull_build_deploy.bat"

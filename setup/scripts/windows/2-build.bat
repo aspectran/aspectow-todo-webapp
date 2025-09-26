@@ -8,7 +8,10 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-call "%~dp0..\setenv.bat"
+rem Load environment variables from the setup directory
+pushd %~dp0..\..
+call setenv.bat
+popd
 
 cd /d "%REPO_DIR%"
 mvn clean package -U -Dmaven.test.skip=true %1

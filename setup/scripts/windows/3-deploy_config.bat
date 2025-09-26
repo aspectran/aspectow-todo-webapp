@@ -2,7 +2,10 @@
 rem Deploys configuration files.
 rem It also restores specific configuration files from the restore directory.
 
-call "%~dp0..\setenv.bat"
+rem Load environment variables from the setup directory
+pushd %~dp0..\..
+call setenv.bat
+popd
 
 echo Deploying configurations to %DEPLOY_DIR%\config ...
 if exist "%DEPLOY_DIR%\config" rmdir /s /q "%DEPLOY_DIR%\config"
