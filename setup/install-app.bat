@@ -65,7 +65,7 @@ if exist "%REPO_DIR%\app\cmd\sample" (
 )
 
 rem --- Copy operational scripts ---
-copy /y "%REPO_DIR%\setup\setenv.bat" "%BASE_DIR%"
+copy /y "%SETUP_DIR%setenv.bat" "%BASE_DIR%"
 xcopy /s /e /i /q /y "%REPO_DIR%\setup\scripts\windows\*.bat" "%BASE_DIR%"
 
 echo.

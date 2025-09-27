@@ -54,7 +54,7 @@ chmod +x "$DEPLOY_DIR"/bin/*.sh
 [ -d "$REPO_DIR/app/cmd/sample" ] && rm -rf "${DEPLOY_DIR:?}"/cmd/sample/*
 [ -d "$REPO_DIR/app/cmd/sample" ] && cp -pR "$REPO_DIR"/app/cmd/sample/* "$DEPLOY_DIR/cmd/sample"
 
-cp "$REPO_DIR/setup/app.conf" "$BASE_DIR" || exit
+cp ./app.conf "$BASE_DIR" || exit
 cp "$REPO_DIR"/setup/scripts/linux/*.sh "$BASE_DIR" || exit
 chmod +x "$BASE_DIR"/*.sh
 cp "$REPO_DIR/setup/install-service.sh" "$BASE_DIR/setup" || exit
