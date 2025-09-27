@@ -12,9 +12,11 @@ call "%~dp0\setenv.bat"
 
 if not exist "%REPO_DIR%" (
   if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
-  cd /d "%BUILD_DIR%"
+  pushd "%BUILD_DIR%"
   git clone "%REPO_URL%" "%APP_NAME%"
+  popd
 ) else (
-  cd /d "%REPO_DIR%"
+  pushd "%REPO_DIR%"
   git pull
+  popd
 )
