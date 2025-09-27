@@ -78,7 +78,7 @@ echo To build and deploy the application, run one of the following scripts:
   - 6-pull_deploy.bat (to pull and deploy without building)
 
 echo After deployment, you can run the application interactively:
-echo   %DEPLOY_DIR%\bin\jline-shell.bat
+echo   %DEPLOY_DIR%\bin\shell.bat
 
 echo To install as a Windows Service, run as an Administrator:
   %DEPLOY_DIR%\bin\procrun\install.bat
