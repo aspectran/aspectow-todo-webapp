@@ -37,14 +37,13 @@ Linux / Unix Setup
 Windows Setup
 ------------------------
 
-1. On your target server, copy the **entire `setup` directory** from the source
-   repository to a location of your choice. This directory must include:
-   - `install-app.bat`
-   - `setenv.bat`
-   - The `scripts\` subdirectory and all its contents.
+1. On your target server, create a directory for the setup files.
+   > mkdir setup
+   > cd setup
 
-2. Navigate into the copied `setup` directory.
-   > cd path\to\setup
+2. Create the two initial files, `setenv.bat` and `install-app.bat`, inside the
+   `setup` directory. You can copy them from the source repository's `setup`
+   directory.
 
 3. Edit `setenv.bat` to match your server environment (e.g., `APP_NAME`,
    `BASE_DIR`). Note: `BASE_DIR` should be a Windows-style path like `C:\MyApp`).

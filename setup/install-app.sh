@@ -42,9 +42,7 @@ if [ -d "$REPO_DIR/app/cmd" ]; then
   mkdir -p "$DEPLOY_DIR/cmd/queued"
   mkdir -p "$DEPLOY_DIR/cmd/sample"
 fi
-if [ -d "$REPO_DIR/app/webroot" ]; then
-  mkdir -p "$DEPLOY_DIR/webroot"
-fi
+
 if [ -d "$REPO_DIR/app/webapps" ]; then
   mkdir -p "$DEPLOY_DIR/webapps"
 fi
@@ -64,7 +62,15 @@ cp "$REPO_DIR/setup/uninstall-service.sh" "$BASE_DIR/setup" || exit
 chmod +x "$BASE_DIR"/setup/*.sh
 
 echo "--------------------------------------------------------------------------"
-echo "Your application installation is complete."
+echo "Your application initial setup is complete in $BASE_DIR."
+echo
+echo "To build and deploy the application, run one of the following scripts:"
+echo "  - ./5-pull_build_deploy.sh (to pull, build, and deploy all)"
+echo "  - ./6-pull_deploy.sh (to pull and deploy without building)"
+echo
+echo "After deployment, you can run the application interactively:"
+echo "  $DEPLOY_DIR/bin/shell.sh"
+echo
 echo "To register this application as a service, run the following script:"
 echo "  $BASE_DIR/setup/install-service.sh"
 echo "You can also remove a registered service by running the following script:"

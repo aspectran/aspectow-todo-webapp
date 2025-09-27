@@ -9,7 +9,7 @@ rem The name of the application. Used for directory names and service names.
 set "APP_NAME=aspectow-todo-webapp"
 
 rem The Git repository URL for the application source code.
-set "REPO_URL=https://github.com/aspectran/%APP_NAME%.git"
+set "REPO_URL=https://github.com/aspectran/%APP_NAME%"
 
 rem The root directory for the application installation.
 set "BASE_DIR=C:\Aspectran\%APP_NAME%"
