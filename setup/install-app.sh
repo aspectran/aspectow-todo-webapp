@@ -61,14 +61,12 @@ cp "$REPO_DIR/setup/install-service.sh" "$BASE_DIR/setup" || exit
 cp "$REPO_DIR/setup/uninstall-service.sh" "$BASE_DIR/setup" || exit
 chmod +x "$BASE_DIR"/setup/*.sh
 
-cd "$BASE_DIR" || exit
-
 echo "--------------------------------------------------------------------------"
 echo "Your application initial setup is complete in $BASE_DIR."
 echo
 echo "To build and deploy the application, run one of the following scripts:"
-echo "  - ./5-pull_build_deploy.sh (to pull, build, and deploy all)"
-echo "  - ./6-pull_deploy.sh (to pull and deploy without building)"
+echo "  - ./5-pull_build_deploy.sh (for full update)"
+echo "  - ./8-pull_deploy_webapps_only.sh (for webapps update only)"
 echo
 echo "After deployment, you can run the application interactively:"
 echo "  $DEPLOY_DIR/bin/shell.sh"
