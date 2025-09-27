@@ -67,21 +67,22 @@ if exist "%REPO_DIR%\app\cmd\sample" (
 rem --- Copy operational scripts ---
 copy /y "%REPO_DIR%\setup\setenv.bat" "%BASE_DIR%"
 xcopy /s /e /i /q /y "%REPO_DIR%\setup\scripts\windows\*.bat" "%BASE_DIR%"
-cd "%BASE_DIR%"
+
+cd /d "%BASE_DIR%"
 
 echo.
 echo --------------------------------------------------------------------------
 echo Your application initial setup is complete in "%BASE_DIR%".
 echo.
 echo To build and deploy the application, run one of the following scripts:
-  - 5-pull_build_deploy.bat (to pull, build, and deploy all)
-  - 6-pull_deploy.bat (to pull and deploy without building)
-
+echo   - 5-pull_build_deploy.bat (to pull, build, and deploy all)
+echo   - 6-pull_deploy.bat (to pull and deploy without building)
+echo.
 echo After deployment, you can run the application interactively:
 echo   %DEPLOY_DIR%\bin\shell.bat
-
+echo.
 echo To install as a Windows Service, run as an Administrator:
-  %DEPLOY_DIR%\bin\procrun\install.bat
---------------------------------------------------------------------------
+echo   %DEPLOY_DIR%\bin\procrun\install.bat
+echo --------------------------------------------------------------------------
 
 endlocal

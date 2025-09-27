@@ -61,6 +61,8 @@ cp "$REPO_DIR/setup/install-service.sh" "$BASE_DIR/setup" || exit
 cp "$REPO_DIR/setup/uninstall-service.sh" "$BASE_DIR/setup" || exit
 chmod +x "$BASE_DIR"/setup/*.sh
 
+cd "$BASE_DIR" || exit
+
 echo "--------------------------------------------------------------------------"
 echo "Your application initial setup is complete in $BASE_DIR."
 echo
