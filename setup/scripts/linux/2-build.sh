@@ -6,7 +6,8 @@ set -e
 # Check if mvn is installed
 command -v mvn >/dev/null || { echo "Error: Maven (mvn) is not installed. Please install it and try again."; exit 1; }
 
-. ./app.conf
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")                                                                                                                                                                                                                          │
+. "$SCRIPT_DIR/app.conf"
 
 cd "$REPO_DIR"
 
