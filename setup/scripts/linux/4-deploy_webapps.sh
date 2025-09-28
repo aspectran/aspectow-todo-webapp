@@ -4,7 +4,7 @@
 
 set -e
 
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")                                                                                                                                                                                                                          │
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 . "$SCRIPT_DIR/app.conf"
 
 echo "Deploying web applications to $DEPLOY_DIR/webapps ..."
