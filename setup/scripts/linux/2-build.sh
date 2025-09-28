@@ -10,7 +10,7 @@ command -v mvn >/dev/null || { echo "Error: Maven (mvn) is not installed. Please
 
 cd "$REPO_DIR"
 
-mvn clean package -U -Dmaven.test.skip=true "$1"
+mvn clean package -U -Dmaven.test.skip=true "$@"
 
 echo "Deploying libraries to $DEPLOY_DIR/lib ..."
 rm -rf "${DEPLOY_DIR:?}"/lib/*
