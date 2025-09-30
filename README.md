@@ -1,32 +1,58 @@
-Aspectow Enterprise Edition
-===========================
+# Aspectow To-Do Web Application
 
-Aspectow Enterprise Edition is an all-in-one web application server based on Aspectran,
-fully supporting the servlet specification and suitable for building enterprise web applications.
-It uses JBoss' [Undertow](http://undertow.io) as a servlet engine and web server, and [Apache Jasper](https://mvnrepository.com/artifact/org.mortbay.jasper/apache-jsp),
-which is used in Apache Tomcat, as a JSP engine.
+This is a sample "To-Do" web application built with Aspectow Enterprise Edition. It demonstrates how to create a simple, database-driven web application using Aspectran and its related technologies.
 
-Running Aspectow
-----------------
+## About this Project
 
-- Clone this repository
+This project serves as a practical example for developers getting started with Aspectow. It includes basic CRUD (Create, Read, Update, Delete) operations for managing a to-do list, showcasing the core features of the Aspectran framework in a web environment.
 
-  ```sh
-  $ git clone https://github.com/aspectran/aspectow.git
-  ```
+## Key Technologies
 
-- Build with Maven
+- **Framework**: Aspectran
+- **Web Server**: Undertow (embedded)
+- **View Layer**: Thymeleaf
+- **Database**: H2 (embedded)
 
-  ```sh
-  $ cd aspectow
-  $ mvn clean package
-  ```
+## Requirements
 
-- Run with Aspectran Shell
+- Java 21 or later
+- Maven 3.6.3 or later
 
-  ```sh
-  $ cd app/bin
-  $ ./shell.sh
-  ```
+## Building from Source
 
-- Access in your browser at http://localhost:8081
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/aspectran/aspectow-todo-webapp.git
+    ```
+
+2.  **Navigate to the project directory:**
+    ```sh
+    cd aspectow-todo-webapp
+    ```
+
+3.  **Build the project with Maven:**
+    This will compile the source code and package the application.
+    ```sh
+    mvn clean package
+    ```
+
+## Running the Application
+
+Once the project is built, you can start the application using the Aspectran Shell.
+
+1.  **Navigate to the `bin` directory:**
+    ```sh
+    cd app/bin
+    ```
+
+2.  **Start the Aspectran Shell:**
+    ```sh
+    ./shell.sh
+    ```
+
+3.  **Access the application:**
+    Open your web browser and navigate to [http://localhost:8080](http://localhost:8080).
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE.txt).
