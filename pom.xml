@@ -33,9 +33,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <maven.compiler.release>21</maven.compiler.release>
+        <!-- [Critical] Must be 'true' to preserve method parameter names, which Aspectran requires for runtime argument mapping. -->
+        <maven.compiler.parameters>true</maven.compiler.parameters>
 
         <aspectran.version>9.0.3</aspectran.version>
-        <aspectow.appmon.version>2.0.0</aspectow.appmon.version>
+        <aspectow.appmon.version>2.1.0</aspectow.appmon.version>
     </properties>
 
     <repositories>
@@ -89,7 +91,6 @@
                     <compilerArgs>
                         <arg>-Xlint:-try,-path,-options</arg>
                     </compilerArgs>
-                    <parameters>true</parameters>
                     <proc>full</proc>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
