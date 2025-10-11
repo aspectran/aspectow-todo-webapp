@@ -16,7 +16,7 @@ This project serves as a practical example for developers getting started with A
 ## Requirements
 
 - Java 21 or later
-- Maven 3.6.3 or later
+- Maven 3.9.4 or later
 
 ## Building from Source
 
