@@ -2,6 +2,8 @@
 
 This is a sample "To-Do" web application built with Aspectow Enterprise Edition. It demonstrates how to create a simple, database-driven web application using Aspectran and its related technologies.
 
+<img width="1042" alt="petclinic-screenshot" src="https://aspectran.com/images/projects/todo.png">
+
 ## About this Project
 
 This project serves as a practical example for developers getting started with Aspectow. It includes basic CRUD (Create, Read, Update, Delete) operations for managing a to-do list, showcasing the core features of the Aspectran framework in a web environment.
