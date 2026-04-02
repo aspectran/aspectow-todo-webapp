@@ -176,47 +176,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>license</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.mycila</groupId>
-                        <artifactId>license-maven-plugin</artifactId>
-                        <version>5.0.0</version>
-                        <executions>
-                            <execution>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>format</goal>
-                                </goals>
-                                <configuration>
-                                    <aggregate>true</aggregate>
-                                    <failIfMissing>true</failIfMissing>
-                                    <failIfUnknown>true</failIfUnknown>
-                                    <strictCheck>true</strictCheck>
-                                    <mapping>
-                                        <java>SLASHSTAR_STYLE</java>
-                                    </mapping>
-                                    <properties>
-                                        <copyright-range>${project.inceptionYear}-present</copyright-range>
-                                    </properties>
-                                    <licenseSets>
-                                        <licenseSet>
-                                            <header>header.txt</header>
-                                            <includes>
-                                                <include>**/*.java</include>
-                                            </includes>
-                                        </licenseSet>
-                                    </licenseSets>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
