@@ -1,38 +1,38 @@
-app/.lock
-app/jsvc_daemon.pid
-app/bin/jdk-*
-app/**/*.xml.apon
-
-# Maven release
-release.properties
-pom.xml.releaseBackup
-pom.xml.next
-pom.xml.branch
-
 # Eclipse project files
-.project
-.classpath
-.settings
+/.classpath
+/.settings
+/.project
 
 # IntelliJ IDEA project files and directories
-*.iml
-*.ipr
-*.iws
-.idea/
+/*.iml
+/*.ipr
+/*.iws
+/.idea
 
-# Build targets
+# Maven and deployment build outputs
 /target
-*/target
+/.build
 
-# Report directories
-/reports
-*/reports
+# Application runtime directories
+/app/lib/
+/app/logs*/
+/app/temp*/
+/app/work*/
 
-# Mac-specific directory that no other operating system needs
-.DS_Store
+# Daemon command processing queues
+/app/cmd*/completed/
+/app/cmd*/failed/
+/app/cmd*/incoming/
+/app/cmd*/queued/
 
-# JVM crash logs
-hs_err_pid*.log
+# Runtime locks, PIDs, and local binaries
+/app/.lock
+/app/*.pid
+/app/bin/jdk-*
+/.build.lock/
+/.pull.lock/
+/.build.success
+/.pull.success
 
-# These are needed if running in IDE without properties set
-.mvn/wrapper/maven-wrapper.jar
+# Auto-generated configuration files
+/app/**/*.xml.apon
