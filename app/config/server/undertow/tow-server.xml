@@ -19,6 +19,17 @@
                 <property name="host">%{tow.server.listener.http.host}</property>
             </bean>
         </property>
+        <property name="serverOptions">
+            <bean class="com.aspectran.undertow.server.TowOptions">
+                <property name="decodeUrl" valueType="boolean">true</property>
+                <property name="urlCharset">UTF-8</property>
+            </bean>
+        </property>
+        <property name="workerOptions">
+            <bean class="com.aspectran.undertow.server.TowOptions">
+                <property name="workerName">TOW</property>
+            </bean>
+        </property>
         <property name="requestHandlerFactory">
             <bean class="com.aspectran.undertow.server.handler.ServletRequestHandlerFactory">
                 <property name="handlerChainWrappers" type="array">
