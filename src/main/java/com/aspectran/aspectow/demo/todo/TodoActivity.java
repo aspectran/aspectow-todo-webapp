@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Activity for handling To-Do list operations.
+ * Activity for handling To-Do list operations in the web UI.
  *
  * <p>Created: 2025. 09. 25.</p>
  */
@@ -50,24 +50,23 @@ public class TodoActivity {
      */
     @RequestToGet("/todos")
     @Dispatch("todo/list")
-    @Action("todos") // Make this method also an action named "todos"
+    @Action("todos")
     public List<Todo> showTodoListPage() {
         logger.info("Request to show the to-do list page.");
-        return todoService.getTodos(); // Return the list of todos
+        return todoService.getTodos();
     }
-
-
 
     /**
      * Adds a new To-Do item.
-     * @param task the task description from the request parameter
+     * @param title the task description from the request parameter
      */
     @RequestToPost("/todos")
     @Redirect("/todos")
-    public void addTodo(String task) {
-        if (task != null && !task.isBlank()) {
-            todoService.addTodo(task);
-            logger.info("Added new to-do: {}", task);
+    public void addTodo(String title, String task) {
+        String description = (title != null && !title.isBlank()) ? title : task;
+        if (description != null && !description.isBlank()) {
+            todoService.addTodo(description);
+            logger.info("Added new to-do: {}", description);
         }
     }
 

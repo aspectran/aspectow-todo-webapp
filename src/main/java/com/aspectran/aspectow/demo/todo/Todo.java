@@ -22,38 +22,67 @@ package com.aspectran.aspectow.demo.todo;
  */
 public class Todo {
 
-    private long id;
-    private String task;
-    private boolean completed;
+    private Long id;
+    private String title;
+    private Boolean completed = Boolean.FALSE;
+    private String url;
+    private Integer order;
 
-    public Todo(long id, String task) {
+    public Todo() {
+    }
+
+    public Todo(Long id, String title) {
         this.id = id;
-        this.task = task;
+        this.title = title;
         this.completed = false;
     }
 
-    // Getters and Setters
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Boolean getCompleted() {
+        return completed != null && completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     public String getTask() {
-        return task;
+        return title;
     }
 
     public void setTask(String task) {
-        this.task = task;
+        this.title = task;
     }
 
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
 }

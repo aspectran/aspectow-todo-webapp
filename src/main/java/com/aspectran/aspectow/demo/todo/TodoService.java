@@ -15,16 +15,15 @@
  */
 package com.aspectran.aspectow.demo.todo;
 
+import com.aspectran.core.component.bean.annotation.Autowired;
 import com.aspectran.core.component.bean.annotation.Bean;
 import com.aspectran.core.component.bean.annotation.Component;
+import org.jspecify.annotations.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Service class for managing To-Do items.
+ * Service class for managing To-Do items backed by H2 and MyBatis.
  *
  * <p>Created: 2025. 09. 25.</p>
  */
@@ -32,42 +31,110 @@ import java.util.concurrent.atomic.AtomicLong;
 @Bean("todoService")
 public class TodoService {
 
-    private final List<Todo> todos = Collections.synchronizedList(new ArrayList<>());
-    private final AtomicLong counter = new AtomicLong();
+    private final TodoDao todoDao;
 
-    public TodoService() {
-        // Add some initial data
-        addTodo("Learn Aspectran");
-        addTodo("Build a To-Do App");
-        addTodo("Profit!");
+    @Autowired
+    public TodoService(TodoDao todoDao) {
+        this.todoDao = todoDao;
     }
 
+    /**
+     * Retrieves all To-Do items.
+     * @return the list of todos
+     */
     public List<Todo> getTodos() {
-        return new ArrayList<>(todos);
+        return todoDao.selectTodos();
     }
 
+    /**
+     * Retrieves a To-Do item by ID.
+     * @param id the ID of the todo
+     * @return the todo item, or null if not found
+     */
     public Todo getTodo(long id) {
-        return todos.stream()
-                .filter(todo -> todo.getId() == id)
-                .findFirst()
-                .orElse(null);
+        return todoDao.selectTodoById(id);
     }
 
-    public Todo addTodo(String task) {
-        Todo newTodo = new Todo(counter.incrementAndGet(), task);
-        todos.add(newTodo);
-        return newTodo;
+    /**
+     * Adds a new To-Do item with a title.
+     * @param title the task description
+     * @return the newly created todo
+     */
+    public Todo addTodo(String title) {
+        Todo todo = new Todo();
+        todo.setTitle(title);
+        todo.setCompleted(false);
+        todoDao.insertTodo(todo);
+        return todo;
     }
 
+    /**
+     * Adds a new To-Do item.
+     * @param todo the todo item to add
+     * @return the newly created todo
+     */
+    public Todo addTodo(@NonNull Todo todo) {
+        if (todo.getCompleted() == null) {
+            todo.setCompleted(false);
+        }
+        todoDao.insertTodo(todo);
+        return todo;
+    }
+
+    /**
+     * Updates the completion status of a To-Do item.
+     * @param id the ID of the item to update
+     * @param completed the new completion status
+     * @return the updated todo, or null if not found
+     */
     public Todo updateTodo(long id, boolean completed) {
-        Todo todo = getTodo(id);
+        Todo todo = todoDao.selectTodoById(id);
         if (todo != null) {
             todo.setCompleted(completed);
+            todoDao.updateTodo(todo);
         }
         return todo;
     }
 
-    public boolean deleteTodo(long id) {
-        return todos.removeIf(todo -> todo.getId() == id);
+    /**
+     * Partially updates a To-Do item with new field values.
+     * @param id the ID of the item to update
+     * @param delta the todo item containing updated fields
+     * @return the updated todo, or null if not found
+     */
+    public Todo patchTodo(long id, Todo delta) {
+        Todo existing = todoDao.selectTodoById(id);
+        if (existing == null) {
+            return null;
+        }
+        if (delta.getTitle() != null) {
+            existing.setTitle(delta.getTitle());
+        }
+        if (delta.getCompleted() != null) {
+            existing.setCompleted(delta.getCompleted());
+        }
+        if (delta.getOrder() != null) {
+            existing.setOrder(delta.getOrder());
+        }
+        todoDao.updateTodo(existing);
+        return existing;
     }
+
+    /**
+     * Deletes a To-Do item by ID.
+     * @param id the ID of the item to delete
+     * @return true if deleted, false otherwise
+     */
+    public boolean deleteTodo(long id) {
+        return todoDao.deleteTodoById(id) > 0;
+    }
+
+    /**
+     * Deletes all To-Do items.
+     * @return true if deleted, false otherwise
+     */
+    public boolean deleteAllTodos() {
+        return todoDao.deleteAllTodos() >= 0;
+    }
+
 }

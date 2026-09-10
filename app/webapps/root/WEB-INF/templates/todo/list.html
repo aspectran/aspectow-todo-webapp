@@ -9,8 +9,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5" style="max-width: 640px;">
         <h1 class="text-center">Aspectow To-Do List</h1>
+        <div class="text-center text-muted mb-3">
+            <small>REST API: <a th:href="@{/todos/api}" target="_blank" class="text-decoration-none">/todos/api</a> (Todo-Backend Spec)</small>
+        </div>
 
         <!-- To-Do List -->
         <ul class="list-group mt-4" id="todo-list">
@@ -18,7 +21,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <form th:action="@{/todos/{id}/update(id=${todo.id})}" method="post" class="flex-grow-1">
                         <input type="checkbox" name="completed" class="form-check-input me-2" th:checked="${todo.completed}" onchange="this.form.submit()">
-                        <span th:text="${todo.task}" th:classappend="${todo.completed} ? 'text-decoration-line-through' : ''">Task description</span>
+                        <span th:text="${todo.title}" th:classappend="${todo.completed} ? 'text-decoration-line-through' : ''">Task description</span>
                     </form>
                     <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -30,7 +33,7 @@
         <!-- Add To-Do Form -->
         <form th:action="@{/todos}" method="post" class="mt-4">
             <div class="input-group">
-                <input type="text" name="task" class="form-control" placeholder="Add a new task..." required>
+                <input type="text" name="title" class="form-control" placeholder="Add a new task..." required>
                 <button type="submit" class="btn btn-primary">Add Task</button>
             </div>
         </form>
