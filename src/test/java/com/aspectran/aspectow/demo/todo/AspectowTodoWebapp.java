@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.todo;
+package com.aspectran.aspectow.demo.todo;
 
 import com.aspectran.shell.jline.JLineAspectranShell;
 import com.aspectran.utils.ResourceUtils;

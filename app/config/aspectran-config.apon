@@ -14,13 +14,16 @@ system: {
     }
 }
 context: {
-    name: demo
-    rules: /config/root-context.xml
+    name: root
+    rules: [
+        /config/aspectran-rules.xml
+        /config/server/server.xml
+    ]
     resources: [
         /lib/ext
     ]
     scan: [
-        com.example.todo
+        com.aspectran.aspectow.demo.todo
     ]
     profiles: {
         default: [
@@ -30,7 +33,7 @@ context: {
     autoReload: {
         reloadMode: hard
         scanIntervalSeconds: 5
-        enabled: true
+        enabled: false
     }
     singleton: true
 }
@@ -89,7 +92,7 @@ shell: {
         fileStore: {
             storeDir: /work/_sessions/shell
         }
-        enabled: true
+        enabled: false
     }
     historyFile: /logs/history.log
     verbose: true
@@ -118,7 +121,7 @@ daemon: {
     ]
     session: {
         workerName: daemon
-        enabled: true
+        enabled: false
     }
     acceptable: {
         -: /**

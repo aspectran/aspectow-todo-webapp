@@ -66,6 +66,4 @@
         <argument>#{thymeleaf}</argument>
     </bean>
 
-    <append file="/config/server/server.xml"/>
-
 </aspectran>
