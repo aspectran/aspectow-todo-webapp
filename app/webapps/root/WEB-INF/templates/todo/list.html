@@ -20,7 +20,7 @@
             <li th:each="todo : ${todos}" class="list-group-item">
                 <div class="d-flex justify-content-between align-items-center">
                     <form th:action="@{/todos/{id}/update(id=${todo.id})}" method="post" class="flex-grow-1">
-                        <input type="checkbox" name="completed" class="form-check-input me-2" th:checked="${todo.completed}" onchange="this.form.submit()">
+                        <input type="checkbox" name="completed" class="form-check-input me-2" th:checked="${todo.completed}" value="true" onchange="this.form.submit()">
                         <span th:text="${todo.title}" th:classappend="${todo.completed} ? 'text-decoration-line-through' : ''">Task description</span>
                     </form>
                     <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post">

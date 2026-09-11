@@ -25,15 +25,13 @@ import com.aspectran.core.component.bean.annotation.RequestToPatch;
 import com.aspectran.core.component.bean.annotation.RequestToPost;
 import com.aspectran.core.component.bean.annotation.Transform;
 import com.aspectran.core.context.rule.type.FormatType;
-import com.aspectran.utils.StringUtils;
-import com.aspectran.utils.json.JsonParser;
+import com.aspectran.utils.apon.Parameters;
 import com.aspectran.web.adapter.WebRequestAdapter;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * REST API controller conforming to the Todo-Backend specification.
@@ -74,8 +72,8 @@ public class TodoApiActivity {
      */
     @RequestToPost("/todos/api")
     @Transform(FormatType.JSON)
-    public Todo createTodo(Translet translet) {
-        Todo todo = parseTodoFromBody(translet);
+    public Todo createTodo(Translet translet, Parameters parameters) {
+        Todo todo = parseTodoFromBody(translet, parameters);
         if (todo.getTitle() == null) {
             todo.setTitle("");
         }
@@ -121,8 +119,8 @@ public class TodoApiActivity {
      */
     @RequestToPatch("/todos/api/${id}")
     @Transform(FormatType.JSON)
-    public Todo patchTodo(long id, Translet translet) {
-        Todo delta = parseTodoFromBody(translet);
+    public Todo patchTodo(long id, Translet translet, Parameters parameters) {
+        Todo delta = parseTodoFromBody(translet, parameters);
         Todo updated = todoService.patchTodo(id, delta);
         if (updated != null) {
             updated.setUrl(buildTodoUrl(translet, updated.getId()));
@@ -171,56 +169,36 @@ public class TodoApiActivity {
         return scheme + "://" + host + contextPath + "/todos/api/" + id;
     }
 
-    private @NonNull Todo parseTodoFromBody(@NonNull Translet translet) {
+    private @NonNull Todo parseTodoFromBody(@NonNull Translet translet, @NonNull Parameters parameters) {
         Todo todo = new Todo();
-        String body = translet.getRequestAdapter().getBody();
-        if (StringUtils.hasText(body)) {
-            try {
-                Object parsed = JsonParser.parse(body);
-                if (parsed instanceof Map<?, ?> map) {
-                    if (map.containsKey("title") && map.get("title") != null) {
-                        todo.setTitle(map.get("title").toString());
-                    }
-                    if (map.containsKey("completed") && map.get("completed") != null) {
-                        Object comp = map.get("completed");
-                        if (comp instanceof Boolean b) {
-                            todo.setCompleted(b);
-                        } else {
-                            todo.setCompleted(Boolean.parseBoolean(comp.toString()));
-                        }
-                    }
-                    if (map.containsKey("order") && map.get("order") != null) {
-                        Object ord = map.get("order");
-                        if (ord instanceof Number num) {
-                            todo.setOrder(num.intValue());
-                        } else {
-                            todo.setOrder(Integer.parseInt(ord.toString()));
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                logger.warn("Failed to parse JSON request body: {}", body, e);
-            }
+        try {
+            todo.setTitle(parameters.getString("title"));
+            todo.setCompleted(parameters.getBoolean("completed"));
+            todo.setOrder(parameters.getInt("order"));
+        } catch (Exception e) {
+            String body = translet.getRequestAdapter().getBody();
+            logger.warn("Failed to parse JSON request body: {}", body, e);
         }
         // Fallback to request parameters
         if (todo.getTitle() == null) {
-            String titleParam = translet.getParameter("title");
-            if (titleParam != null) {
-                todo.setTitle(titleParam);
+            String title = translet.getParameter("title");
+            if (title != null) {
+                todo.setTitle(title);
             }
         }
         if (todo.getCompleted() == null) {
-            String compParam = translet.getParameter("completed");
-            if (compParam != null) {
-                todo.setCompleted(Boolean.parseBoolean(compParam));
+            String completed = translet.getParameter("completed");
+            if (completed != null) {
+                todo.setCompleted(Boolean.parseBoolean(completed));
             }
         }
         if (todo.getOrder() == null) {
-            String orderParam = translet.getParameter("order");
-            if (orderParam != null) {
+            String order = translet.getParameter("order");
+            if (order != null) {
                 try {
-                    todo.setOrder(Integer.parseInt(orderParam));
+                    todo.setOrder(Integer.parseInt(order));
                 } catch (NumberFormatException ignored) {
+                    // ignore
                 }
             }
         }

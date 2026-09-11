@@ -120,4 +120,8 @@
         </exception>
     </translet>
 
+    <translet name="/">
+        <redirect path="/todos"/>
+    </translet>
+
 </aspectran>
