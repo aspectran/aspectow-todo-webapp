@@ -61,7 +61,7 @@ public class TodoActivity {
      * @param title the task description from the request parameter
      */
     @RequestToPost("/")
-    @Redirect("/")
+    @Redirect("/todos/")
     public void addTodo(String title, String task) {
         String description = (title != null && !title.isBlank()) ? title : task;
         if (description != null && !description.isBlank()) {
@@ -74,8 +74,8 @@ public class TodoActivity {
      * Deletes a To-Do item.
      * @param id the ID of the item to delete
      */
-    @RequestToPost("/todos/${id}/delete")
-    @Redirect("/")
+    @RequestToPost("/${id}/delete")
+    @Redirect("/todos/")
     public void deleteTodo(long id) {
         todoService.deleteTodo(id);
         logger.info("Deleted to-do item with id: {}", id);
@@ -86,8 +86,8 @@ public class TodoActivity {
      * @param id the ID of the item to update
      * @param completed the completion status from the request parameter
      */
-    @RequestToPost("/todos/${id}/update")
-    @Redirect("/")
+    @RequestToPost("/${id}/update")
+    @Redirect("/todos/")
     public void updateTodo(long id, boolean completed) {
         todoService.updateTodo(id, completed);
         logger.info("Updated completion status for to-do item with id: {}", id);

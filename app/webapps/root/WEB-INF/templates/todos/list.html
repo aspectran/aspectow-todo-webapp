@@ -12,18 +12,18 @@
     <div class="container mt-5" style="max-width: 640px;">
         <h1 class="text-center">Aspectow To-Do List</h1>
         <div class="text-center text-muted mb-3">
-            <small>REST API: <a th:href="@{/api}" target="_blank" class="text-decoration-none">/api</a> (Todo-Backend Spec)</small>
+            <small>REST API: <a th:href="@{/todos/api}" target="_blank" class="text-decoration-none">/api</a> (Todo-Backend Spec)</small>
         </div>
 
         <!-- To-Do List -->
         <ul class="list-group mt-4" id="todo-list">
             <li th:each="todo : ${todos}" class="list-group-item">
                 <div class="d-flex justify-content-between align-items-center">
-                    <form th:action="@{/{id}/update(id=${todo.id})}" method="post" class="flex-grow-1">
+                    <form th:action="@{/todos/{id}/update(id=${todo.id})}" method="post" class="flex-grow-1">
                         <input type="checkbox" name="completed" class="form-check-input me-2" th:checked="${todo.completed}" value="true" onchange="this.form.submit()">
                         <span th:text="${todo.title}" th:classappend="${todo.completed} ? 'text-decoration-line-through text-muted' : ''">Task description</span>
                     </form>
-                    <form th:action="@{/{id}/delete(id=${todo.id})}" method="post">
+                    <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
                 </div>
@@ -31,7 +31,7 @@
         </ul>
 
         <!-- Add To-Do Form -->
-        <form th:action="@{/}" method="post" class="mt-4">
+        <form th:action="@{/todos/}" method="post" class="mt-4">
             <div class="input-group">
                 <input type="text" name="title" class="form-control" placeholder="Add a new task..." required>
                 <button type="submit" class="btn btn-primary">Add Task</button>

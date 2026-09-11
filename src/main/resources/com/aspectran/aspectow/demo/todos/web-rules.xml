@@ -121,7 +121,7 @@
     </translet>
 
     <translet name="/">
-        <redirect path="/todos"/>
+        <redirect path="/todos/"/>
     </translet>
 
 </aspectran>
