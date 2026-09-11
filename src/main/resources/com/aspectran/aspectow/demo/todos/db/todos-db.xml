@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aspectran PUBLIC "-//ASPECTRAN//DTD Aspectran 9.0//EN"
+        "https://aspectran.com/dtd/aspectran-9.dtd">
+<aspectran>
+
+    <!-- Database & MyBatis Configuration -->
+    <bean id="sqlSessionFactory" class="com.aspectran.mybatis.SqlSessionFactoryBean" lazyDestroy="true">
+        <property name="configLocation" value="classpath:com/aspectran/aspectow/demo/todos/db/mybatis-config.xml"/>
+        <property name="environmentId" value="default"/>
+        <property name="variables" type="properties">
+            <entry name="driver">%{classpath:com/aspectran/aspectow/demo/todos/db/todos.db-h2.properties^driver}</entry>
+            <entry name="url">%{classpath:com/aspectran/aspectow/demo/todos/db/todos.db-h2.properties^url}</entry>
+            <entry name="username">%{classpath:com/aspectran/aspectow/demo/todos/db/todos.db-h2.properties^username}</entry>
+            <entry name="password">%{classpath:com/aspectran/aspectow/demo/todos/db/todos.db-h2.properties^password}</entry>
+        </property>
+    </bean>
+
+</aspectran>

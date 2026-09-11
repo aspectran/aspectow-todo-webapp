@@ -13,25 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aspectran.aspectow.demo.todo.db.tx;
+package com.aspectran.aspectow.demo.todos.db.tx;
 
+import com.aspectran.core.component.bean.annotation.Autowired;
 import com.aspectran.core.component.bean.annotation.Bean;
 import com.aspectran.core.component.bean.annotation.Component;
-import com.aspectran.mybatis.DefaultSqlSessionAgent;
+import com.aspectran.mybatis.SqlMapperProvider;
+import org.apache.ibatis.session.SqlSession;
 
 /**
- * SqlSession agent for default transactional operations.
+ * Provider for MyBatis SqlMapper instances.
  *
  * <p>Created: 2026. 09. 10.</p>
  */
 @Component
-@Bean(id = "simpleSqlSession", lazyDestroy = true)
-public class SimpleSqlSession extends DefaultSqlSessionAgent {
+@Bean(lazyDestroy = true)
+public class TodoSqlMapperProvider implements SqlMapperProvider {
 
-    public SimpleSqlSession() {
-        super("simpleTxAspect");
-        setSqlSessionFactoryBeanId("sqlSessionFactory");
-        setAutoCommit(true);
+    private final SqlSession sqlSession;
+
+    @Autowired
+    public TodoSqlMapperProvider(SimpleSqlSession simpleSqlSession) {
+        this.sqlSession = simpleSqlSession;
+    }
+
+    @Override
+    public SqlSession getSimpleSqlSession() {
+        return sqlSession;
     }
 
 }

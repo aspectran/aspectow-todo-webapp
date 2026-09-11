@@ -23,7 +23,7 @@ context: {
         /lib/ext
     ]
     scan: [
-        com.aspectran.aspectow.demo.todo
+        com.aspectran.aspectow.demo.todos
     ]
     profiles: {
         default: [

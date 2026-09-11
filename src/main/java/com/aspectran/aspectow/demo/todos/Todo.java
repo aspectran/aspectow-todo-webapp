@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aspectran.aspectow.demo.todo;
+package com.aspectran.aspectow.demo.todos;
 
 /**
  * Represents a single To-Do item.
@@ -75,14 +75,6 @@ public class Todo {
 
     public void setOrder(Integer order) {
         this.order = order;
-    }
-
-    public String getTask() {
-        return title;
-    }
-
-    public void setTask(String task) {
-        this.title = task;
     }
 
 }

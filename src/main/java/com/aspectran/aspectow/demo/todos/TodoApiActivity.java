@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aspectran.aspectow.demo.todo;
+package com.aspectran.aspectow.demo.todos;
 
 import com.aspectran.core.activity.Translet;
 import com.aspectran.core.adapter.RequestAdapter;
@@ -72,7 +72,7 @@ public class TodoApiActivity {
      */
     @RequestToPost("/todos/api")
     @Transform(FormatType.JSON)
-    public Todo createTodo(Translet translet, Parameters parameters) {
+    public Todo createTodo(@NonNull Translet translet, @NonNull Parameters parameters) {
         Todo todo = parseTodoFromBody(translet, parameters);
         if (todo.getTitle() == null) {
             todo.setTitle("");
@@ -119,7 +119,7 @@ public class TodoApiActivity {
      */
     @RequestToPatch("/todos/api/${id}")
     @Transform(FormatType.JSON)
-    public Todo patchTodo(long id, Translet translet, Parameters parameters) {
+    public Todo patchTodo(long id, @NonNull Translet translet, @NonNull Parameters parameters) {
         Todo delta = parseTodoFromBody(translet, parameters);
         Todo updated = todoService.patchTodo(id, delta);
         if (updated != null) {
@@ -169,7 +169,7 @@ public class TodoApiActivity {
         return scheme + "://" + host + contextPath + "/todos/api/" + id;
     }
 
-    private @NonNull Todo parseTodoFromBody(@NonNull Translet translet, @NonNull Parameters parameters) {
+    private @NonNull Todo parseTodoFromBody(Translet translet, Parameters parameters) {
         Todo todo = new Todo();
         try {
             todo.setTitle(parameters.getString("title"));

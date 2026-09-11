@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aspectran.aspectow.demo.todo;
+package com.aspectran.aspectow.demo.todos;
 
 import com.aspectran.core.component.bean.annotation.Action;
 import com.aspectran.core.component.bean.annotation.Autowired;
@@ -32,7 +32,7 @@ import java.util.List;
  *
  * <p>Created: 2025. 09. 25.</p>
  */
-@Component
+@Component("/todos")
 public class TodoActivity {
 
     private static final Logger logger = LoggerFactory.getLogger(TodoActivity.class);
@@ -48,8 +48,8 @@ public class TodoActivity {
      * Shows the main to-do list page.
      * @return the list of todos to be displayed
      */
-    @RequestToGet("/todos")
-    @Dispatch("todo/list")
+    @RequestToGet("/")
+    @Dispatch("todos/list")
     @Action("todos")
     public List<Todo> showTodoListPage() {
         logger.info("Request to show the to-do list page.");
@@ -60,8 +60,8 @@ public class TodoActivity {
      * Adds a new To-Do item.
      * @param title the task description from the request parameter
      */
-    @RequestToPost("/todos")
-    @Redirect("/todos")
+    @RequestToPost("/")
+    @Redirect("/")
     public void addTodo(String title, String task) {
         String description = (title != null && !title.isBlank()) ? title : task;
         if (description != null && !description.isBlank()) {
@@ -75,7 +75,7 @@ public class TodoActivity {
      * @param id the ID of the item to delete
      */
     @RequestToPost("/todos/${id}/delete")
-    @Redirect("/todos")
+    @Redirect("/")
     public void deleteTodo(long id) {
         todoService.deleteTodo(id);
         logger.info("Deleted to-do item with id: {}", id);
@@ -87,7 +87,7 @@ public class TodoActivity {
      * @param completed the completion status from the request parameter
      */
     @RequestToPost("/todos/${id}/update")
-    @Redirect("/todos")
+    @Redirect("/")
     public void updateTodo(long id, boolean completed) {
         todoService.updateTodo(id, completed);
         logger.info("Updated completion status for to-do item with id: {}", id);

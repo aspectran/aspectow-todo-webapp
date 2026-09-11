@@ -24,7 +24,7 @@
     </environments>
 
     <mappers>
-        <mapper resource="com/aspectran/aspectow/demo/todo/db/mapper/TodoMapper.xml"/>
+        <mapper resource="com/aspectran/aspectow/demo/todos/db/mapper/TodoMapper.xml"/>
     </mappers>
 
 </configuration>

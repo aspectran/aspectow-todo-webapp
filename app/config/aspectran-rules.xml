@@ -28,7 +28,7 @@
         </settings>
     </aspect>
 
-    <append resource="com/aspectran/aspectow/demo/todo/web-rules.xml"/>
-    <append resource="com/aspectran/aspectow/demo/todo/db/db-rules.xml"/>
+    <append resource="com/aspectran/aspectow/demo/todos/web-rules.xml"/>
+    <append resource="com/aspectran/aspectow/demo/todos/db/todos-db.xml"/>
 
 </aspectran>
